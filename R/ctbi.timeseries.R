@@ -53,6 +53,12 @@ if(class.t == 'integer')
   x.t <- as.numeric(x.t)
   class.t <- 'numeric'
 }
+  
+if(class.t == 'IDate')
+{
+  x.t <- as.Date(x.t)
+  class.t <- 'Date'
+}
 
 # class of the by
 log.character.by <- is.character(bin.period)
