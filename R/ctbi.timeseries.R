@@ -42,7 +42,7 @@ class.t <- class.t[1]
 
 log.numeric.t <- class.t == 'numeric' | class.t == 'integer'
 log.POSIXct.t <- class.t == "POSIXct"
-log.Date.t <- class.t == "Date"
+log.Date.t <- class.t == "Date" | class.t == "IDate"
 log.none <- log.numeric.t | log.POSIXct.t | log.Date.t
 if(!log.none)
 {
