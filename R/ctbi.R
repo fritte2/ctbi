@@ -20,6 +20,7 @@ globalVariables(c(":=","x", "y", "index.bin","n.points","n.NA","time.bin","cycle
 #' @return SCI (Stacked Cycle Index), a numeric between 0 and 1 related to the strength of the cyclic pattern within each bin. SCI is defined as SCI = 1 - SS.res/SS.tot - 1/N.bin with SS.tot the sum of the squared detrended data, SS.res the sum of the squared detrended & deseasonalized data, and N.bin the number of accepted bins
 #' @return mean.cycle, a dataset (same class as data.input) with bin.size rows and 4 columns: (i) generic.time.bin1: time of the first bin; (ii) mean: the mean stack of detrended data; (iii) sd: the standard deviation on the mean; (iv) time.bin: relative position of the data points in the bin, between 0 and 1
 #' @return bin.size, the median number of points in non-empty bins
+#' @return n.bin.min, the minimum number of points for a bin to be accepted
 #' @examples
 #' # example 1, airpassenger data
 #' library(data.table)
@@ -88,7 +89,7 @@ ctbi <- function(data.input,bin.side=NULL,bin.period,bin.center=NULL,bin.FUN = '
     char.format <- 'data in ctbi is a two columns data.frame (or data.table), with the first column being the time series (numeric, Date or POSIXct) and the second column the variable to be temporally aggregated (numeric).'
     if(length(data.input[1,]) == 2)
     {
-      if(!is.numeric(data.input[[2]]))
+      if(!is.numeric(data.input[[2]]) & !is.integer(data.input[[2]]))
       {
         stop(char.format)
       }
@@ -176,11 +177,11 @@ ctbi <- function(data.input,bin.side=NULL,bin.period,bin.center=NULL,bin.FUN = '
 
     # k.outliers
     char.k.coeff <- 'k.outliers is a positive number. Outliers are flagged based on the boxplot method, with the original 1.5 constant replaced by k.outliers*log(n)+1 to account for sample size and non-gaussian distributions. The Gaussian value is k.outliers=0.16, the default value is k.outliers=0.6 and k.outliers=Inf means that no outliers are flagged.'
-    if(length(char.k.coeff) == 1)
+    if(length(k.outliers) == 1)
     {
-      if(!is.na(char.k.coeff))
+      if(!is.na(k.outliers))
       {
-        if(char.k.coeff <= 0)
+        if(k.outliers <= 0)
         {
           stop(char.k.coeff)
         }
@@ -197,6 +198,9 @@ ctbi <- function(data.input,bin.side=NULL,bin.period,bin.center=NULL,bin.FUN = '
   # change colnames
   colnames.raw <- copy(colnames(data0))
   setnames(data0,colnames.raw,c('x','y'))
+
+  # force the numeric class of y
+  data0[,y := as.numeric(y)]
 
   # calculate the sequence of bin.side and bin.center
   out <- ctbi.timeseries(data0[[1]],bin.period=bin.period,bin.side=bin.side,bin.center=bin.center)
@@ -228,7 +232,7 @@ ctbi <- function(data.input,bin.side=NULL,bin.period,bin.center=NULL,bin.FUN = '
   }
 
   # calculate the minimum number of points for a bin to be accepted, n.bin.min
-  n.bin.min <- floor(bin.size*(1-bin.max.f.NA))
+  n.bin.min <- ceiling(bin.size*(1-bin.max.f.NA))
   if(n.bin.min < 1)
   {
     n.bin.min <- 1
@@ -400,7 +404,7 @@ ctbi <- function(data.input,bin.side=NULL,bin.period,bin.center=NULL,bin.FUN = '
     setDT(mean.cycle)
   }
 
-  list.main <- list(data0=data0,data1=data1,SCI=SCI,mean.cycle=mean.cycle,bin.size=bin.size)
+  list.main <- list(data0=data0,data1=data1,SCI=SCI,mean.cycle=mean.cycle,bin.size=bin.size,n.bin.min=n.bin.min)
 
   return(list.main)
 }

@@ -43,9 +43,6 @@ ctbi.long.term <- function(data0,n.bin.min,seq.bin.side,outliers.checked)
   both.dt <- rbind(side.dt,center.dt)
   both.dt <- both.dt[order(index)]
 
-  # set the boundaries as NA values, always
-  both.dt[index == min(index) | index == max(index), y:= NA]
-
   # some of the sides might be missing. If there is a valid value for the center around, complete it linearly.
   r1 <- c(rep(c(T,F),(nrow(both.dt)-1)/2),F)
   r2 <- c(rep(c(F,T),(nrow(both.dt)-1)/2),F)

@@ -75,10 +75,10 @@ ctbi.plot <- function(list.main,show.outliers=T,show.n.bin=10)
     {
       if(show.outliers)
       {
-        y.lim <- c(min(c(data0[,2],data0[,'outliers']),na.rm=T),max(c(data0[,2],data0[,'outliers']),na.rm=T))
+        y.lim <- c(min(c(data0[,2],data0[,'outliers'],data0[,'long.term']+data0[,'cycle']),na.rm=T),max(c(data0[,2],data0[,'outliers'],data0[,'long.term']+data0[,'cycle']),na.rm=T))
       }else
       {
-        y.lim <- c(min(c(data0[read.good,2]),na.rm=T),max(c(data0[read.good,2]),na.rm=T))
+        y.lim <- c(min(c(data0[read.good,2],data0[read.good,'long.term']+data0[read.good,'cycle']),na.rm=T),max(c(data0[read.good,2],data0[read.good,'long.term']+data0[read.good,'cycle']),na.rm=T))
       }
 
       par(mar = c(5, 4, 1.4, 0.6))

@@ -1,0 +1,26 @@
+{
+    "id": "70C9D6ED",
+    "path": "~/Science/ctbi2/ctbi-main-v1.0.0/R/ctbi.R",
+    "project_path": "R/ctbi.R",
+    "type": "r_source",
+    "hash": "3995677087",
+    "contents": "",
+    "dirty": false,
+    "created": 1645535786711.0,
+    "source_on_save": false,
+    "relative_order": 1,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "387,41",
+        "scrollLine": "376"
+    },
+    "folds": "86|3|195|2|\n",
+    "lastKnownWriteTime": 1645535796,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1645536648859,
+    "read_only": false,
+    "read_only_alternatives": []
+}
