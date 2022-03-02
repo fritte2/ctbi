@@ -1,0 +1,6 @@
+"0","plot(mean.cycle.example1[,'generic.time.bin1'],
+     mean.cycle.example1[,'mean'],type='l',ylim=c(-80,80))
+"
+"2","Error in xy.coords(x, y, xlabel, ylabel, log) : 
+  'x' and 'y' lengths differ
+"

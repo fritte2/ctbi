@@ -1,26 +1,26 @@
 {
-    "id": "70C9D6ED",
-    "path": "~/Science/ctbi2/ctbi-main-v1.0.0/R/ctbi.R",
+    "id": "66233383",
+    "path": "~/GitHub/ctbi/R/ctbi.R",
     "project_path": "R/ctbi.R",
     "type": "r_source",
-    "hash": "3995677087",
+    "hash": "0",
     "contents": "",
     "dirty": false,
-    "created": 1645535786711.0,
+    "created": 1646217784485.0,
     "source_on_save": false,
-    "relative_order": 1,
+    "relative_order": 3,
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "387,41",
-        "scrollLine": "376"
+        "cursorPosition": "45,104",
+        "scrollLine": "25"
     },
-    "folds": "86|3|195|2|\n",
-    "lastKnownWriteTime": 1645535796,
+    "folds": "",
+    "lastKnownWriteTime": 1646218278,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1645536648859,
+    "last_content_update": 1646218278916,
     "read_only": false,
     "read_only_alternatives": []
 }

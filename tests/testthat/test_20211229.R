@@ -1,4 +1,3 @@
-library(data.table)
 set.seed(1)
 # example 1, airpassenger data
 example1 <- data.table(month = seq(from=as.Date('1949-01-01'),to=as.Date('1960-12-01'),

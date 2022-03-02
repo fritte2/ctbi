@@ -48,7 +48,7 @@ mean.cycle, a dataset (same class as data.input) with bin.size rows and 4 column
 
 bin.size, the median number of points in non-empty bins
 
-n.bin.min, the minimum of points for a bin to be accepted
+n.bin.min, the minimum number of points for a bin to be accepted
 }
 \description{
 Clean, decompose and aggregate univariate time series following the procedure "Cyclic/trend decomposition using bin interpolation" and the Logbox method for flagging outliers, both detailed in Ritter, F.: Technical note: A procedure to clean, decompose and aggregate time series, Hydrol. Earth Syst. Sci. Discuss. [preprint], https://doi.org/10.5194/hess-2021-609, in review, 2021.
