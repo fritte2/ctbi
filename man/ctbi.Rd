@@ -54,56 +54,33 @@ n.bin.min, the minimum number of points for a bin to be accepted
 Clean, decompose and aggregate univariate time series following the procedure "Cyclic/trend decomposition using bin interpolation" and the Logbox method for flagging outliers, both detailed in Ritter, F.: Technical note: A procedure to clean, decompose and aggregate time series, Hydrol. Earth Syst. Sci. Discuss. [preprint], https://doi.org/10.5194/hess-2021-609, in review, 2021.
 }
 \examples{
-# example 1, airpassenger data
-library(data.table)
-set.seed(1)
-example1 <- data.table(month = seq(from=as.Date('1949-01-01'),to=as.Date('1960-12-01'),
-                                   by='1 month'),airp = as.numeric(AirPassengers))
-example1[sample(1:144,30),airp := NA]
-example1[c(5,30,50,130),airp := c(-5,850,0,100)]
-example1 <- example1[-(70:100),]
-bin.period <- '1 year' # aggregation performed every year
-bin.side <- as.Date('2000-01-01') # side of a bin
-bin.FUN <- 'sum' # calculate the number of passengers for each year
-bin.max.f.NA <- 0.2 # maximum of 20\% of missing values per bin to accept the bin
-ylim <- c(0,Inf) # a negative number of passengers is impossible
-list.main <- ctbi(example1,bin.period=bin.period,
-                       bin.side=bin.side,bin.FUN=bin.FUN,
-                       ylim=ylim,bin.max.f.NA=bin.max.f.NA)
-data0.example1 <- list.main$data0 # cleaned raw dataset
-data1.example1 <- list.main$data1 # aggregated dataset.
-SCI.example1 <- list.main$SCI # this data set shows a moderate seasonality
-mean.cycle.example1 <- list.main$mean.cycle
-bin.size.example1 <- list.main$bin.size # 12 data points per bin on average (12 months per year)
-ctbi.plot(list.main,show.n.bin=15)
-
-# example 2, sunspot data
-example2 <- data.frame(year = 1700:1988,sunspot = as.numeric(sunspot.year))
-example2[sample(1:289,30),'sunspot'] <- NA
-example2[c(5,30,50),'sunspot'] <- c(-50,300,400)
-example2 <- example2[-(100:200),]
+# example of sunspot data
+example1 <- data.frame(year = 1700:1988,sunspot = as.numeric(sunspot.year))
+example1[sample(1:289,30),'sunspot'] <- NA
+example1[c(5,30,50),'sunspot'] <- c(-50,300,400)
+example1 <- example1[-(100:200),]
 bin.period <- 11 # aggregation performed every 11 years (the year is numeric here)
 bin.side <- 1989 # to capture the last year, 1988, in a complete bin
 bin.FUN <- 'mean'
 bin.max.f.NA <- 0.2
 ylim <- c(0,Inf)
 
-list.main <- ctbi(example2,bin.period=bin.period,
+list.main <- ctbi(example1,bin.period=bin.period,
                        bin.side=bin.side,bin.FUN=bin.FUN,
                        ylim=ylim,bin.max.f.NA=bin.max.f.NA)
-data0.example2 <- list.main$data0 # cleaned raw dataset
-data1.example2 <- list.main$data1 # aggregated dataset.
-SCI.example2 <- list.main$SCI # this data set shows a moderate seasonality
-mean.cycle.example2 <- list.main$mean.cycle # this data set shows a moderate seasonality
-bin.size.example2 <- list.main$bin.size # 12 data points per bin on average (12 months per year)
+data0.example1 <- list.main$data0 # cleaned raw dataset
+data1.example1 <- list.main$data1 # aggregated dataset.
+SCI.example1 <- list.main$SCI # this data set shows a moderate seasonality
+mean.cycle.example1 <- list.main$mean.cycle # this data set shows a moderate seasonality
+bin.size.example1 <- list.main$bin.size # 12 data points per bin on average (12 months per year)
 
-plot(mean.cycle.example2[,'generic.time.bin1'],
-     mean.cycle.example2[,'mean'],type='l',ylim=c(-80,80))
-lines(mean.cycle.example2[,'generic.time.bin1'],
-      mean.cycle.example2[,'mean']+mean.cycle.example2[,'sd'],type='l',lty=2)
-lines(mean.cycle.example2[,'generic.time.bin1'],
-      mean.cycle.example2[,'mean']-mean.cycle.example2[,'sd'],type='l',lty=2)
-title(paste0('mean cycle (weak cyclicity: SCI = ',SCI.example2,')'))
+plot(mean.cycle.example1[,'generic.time.bin1'],
+     mean.cycle.example1[,'mean'],type='l',ylim=c(-80,80),ylab='sunspot cycle',xlab='11 years window')
+lines(mean.cycle.example1[,'generic.time.bin1'],
+      mean.cycle.example1[,'mean']+mean.cycle.example1[,'sd'],type='l',lty=2)
+lines(mean.cycle.example1[,'generic.time.bin1'],
+      mean.cycle.example1[,'mean']-mean.cycle.example1[,'sd'],type='l',lty=2)
+title(paste0('mean cycle (weak cyclicity: SCI = ',SCI.example1,')'))
 # the SCI is much higher on the raw dataset without contamination (SCI = 0.34)
 ctbi.plot(list.main,show.n.bin=10)
 }
