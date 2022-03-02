@@ -3,7 +3,7 @@ Type: Package
 Title: A Procedure to Clean, Decompose and Aggregate Timeseries
 Version: 1.0.0
 Authors@R: person("Francois", "Ritter", email = "ritter.francois@gmail.com", role = c("cre","aut"),comment = c(ORCID = "0000-0001-6123-2145"))
-Description: Clean, decompose and aggregate univariate time series following the procedure "Cyclic/trend decomposition using bin interpolation" and the Logbox method for flagging outliers, both detailed in Ritter, F.: Technical note: A procedure to clean, decompose and aggregate time series, Hydrol. Earth Syst. Sci. Discuss. [preprint], https://doi.org/10.5194/hess-2021-609, in review, 2021.
+Description: Clean, decompose and aggregate univariate time series following the procedure "Cyclic/trend decomposition using bin interpolation" and the Logbox method for flagging outliers, both detailed in Ritter, F.: Technical note: A procedure to clean, decompose and aggregate time series, Hydrol. Earth Syst. Sci. Discuss. [preprint], <doi:10.5194/hess-2021-609>, in review.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
