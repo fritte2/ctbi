@@ -7,8 +7,8 @@
 <!-- badges: end -->
 
 The goal of ctbi is to clean, decompose, impute and aggregate univariate
-time series. Ctbi stands for “Cyclic/trend decomposition using bin
-interpolation” : the time series is divided into a sequence of
+time series. Ctbi stands for *Cyclic/trend decomposition using bin
+interpolation* : the time series is divided into a sequence of
 non-overlapping bins. The long-term trend is a linear interpolation of
 the mean values between successive bins and the cyclic component is the
 mean stack of detrended data within all bins. Outliers present in the

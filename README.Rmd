@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of ctbi is to clean, decompose, impute and aggregate univariate time series. Ctbi stands for "Cyclic/trend decomposition using bin interpolation" : the time series is divided into a sequence of non-overlapping bins. The long-term trend is a linear interpolation of the mean values between successive bins and the cyclic component is the mean stack of detrended data within all bins. Outliers present in the residuals are flagged using an enhanced Boxplot rule called LogBox, which replaces the original 1.5 constant with $k \times \log(n)+1$. The strength of the cyclic pattern within each bin is quantified by a new metric, the Stacked Cycles Index (SCI), with SCI <= 0 associated with no cyclicity and SCI = 1 a perfectly cyclic signal.
+The goal of ctbi is to clean, decompose, impute and aggregate univariate time series. Ctbi stands for *Cyclic/trend decomposition using bin interpolation* : the time series is divided into a sequence of non-overlapping bins. The long-term trend is a linear interpolation of the mean values between successive bins and the cyclic component is the mean stack of detrended data within all bins. Outliers present in the residuals are flagged using an enhanced Boxplot rule called LogBox, which replaces the original 1.5 constant with $k \times \log(n)+1$. The strength of the cyclic pattern within each bin is quantified by a new metric, the Stacked Cycles Index (SCI), with SCI <= 0 associated with no cyclicity and SCI = 1 a perfectly cyclic signal.
 
 ## Installation
 

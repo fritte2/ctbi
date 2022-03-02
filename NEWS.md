@@ -1,6 +1,6 @@
 # ctbi (development version)
 
-# ctbi 1.0.0
+# ctbi 1.0.0 (2022/03/01)
 
 * ORCID of Francois Ritter has been updated.
 

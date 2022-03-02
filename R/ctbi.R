@@ -3,7 +3,7 @@ globalVariables(c(":=","x", "y", "index.bin","n.points","n.NA","time.bin","cycle
 
 #' @title ctbi
 #'
-#' @description Clean, decompose and aggregate univariate time series following the procedure "Cyclic/trend decomposition using bin interpolation" and the Logbox method for flagging outliers, both detailed in Ritter, F.: Technical note: A procedure to clean, decompose and aggregate time series, Hydrol. Earth Syst. Sci. Discuss. [preprint], https://doi.org/10.5194/hess-2021-609, in review, 2021.
+#' @description Clean, decompose and aggregate univariate time series following the procedure "Cyclic/trend decomposition using bin interpolation" and the Logbox method for flagging outliers, both detailed in Ritter, F.: Technical note: A procedure to clean, decompose and aggregate time series, Hydrol. Earth Syst. Sci. Discuss. [preprint], <https://doi.org/10.5194/hess-2021-609>, in review, 2021.
 #'
 #' @param data.input Two columns data.table (or data.frame) with the first column being the time component (POSIXct, Date or numeric) and the second column the value (numeric)
 #' @param bin.side one side of a bin (same class as the time component)
@@ -43,7 +43,9 @@ globalVariables(c(":=","x", "y", "index.bin","n.points","n.NA","time.bin","cycle
 #' bin.size.example1 <- list.main$bin.size # 12 data points per bin on average (12 months per year)
 #'
 #' plot(mean.cycle.example1[,'generic.time.bin1'],
-#'      mean.cycle.example1[,'mean'],type='l',ylim=c(-80,80),ylab='sunspot cycle',xlab='11 years window')
+#'      mean.cycle.example1[,'mean'],type='l',ylim=c(-80,80),
+#'      ylab='sunspot cycle',
+#'      xlab='11 years window')
 #' lines(mean.cycle.example1[,'generic.time.bin1'],
 #'       mean.cycle.example1[,'mean']+mean.cycle.example1[,'sd'],type='l',lty=2)
 #' lines(mean.cycle.example1[,'generic.time.bin1'],
