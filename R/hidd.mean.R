@@ -10,7 +10,7 @@ hidd.mean <- function(x,N.min.NA)
 {
   if(sum(!is.na(x)) >= N.min.NA)
   {
-    y <- mean(x,na.rm=T)
+    y <- mean(x,na.rm=TRUE)
   }else
   {
     y <- NA_real_

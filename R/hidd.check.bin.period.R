@@ -35,7 +35,7 @@ hidd.check.bin.period <- function(bin.period)
   n.afterpower.beg <- NA
   n.afterpower.end <- NA
   n.firstletter <- NA
-  log.first <- F
+  log.first <- FALSE
   for(i in 1:n)
   {
     char.1 <- substr(bin.period,i,i)
@@ -70,10 +70,10 @@ hidd.check.bin.period <- function(bin.period)
         n.afterpower.end <- i-1
       }
     }
-    if(sum(char.1 == special.letters)==1 & log.first==F)
+    if(sum(char.1 == special.letters)==1 & log.first==FALSE)
     {
       n.firstletter <- i
-      log.first <- T
+      log.first <- TRUE
     }
   }
 

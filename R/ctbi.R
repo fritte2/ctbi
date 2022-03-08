@@ -22,16 +22,16 @@ globalVariables(c(":=","x", "y", "index.bin","n.points","n.NA","time.bin","cycle
 #' @return bin.size, the median number of points in non-empty bins
 #' @return n.bin.min, the minimum number of points for a bin to be accepted
 #' @examples
-#' # example of sunspot data
+#' # example of contaminated sunspot data
 #' example1 <- data.frame(year = 1700:1988,sunspot = as.numeric(sunspot.year))
 #' example1[sample(1:289,30),'sunspot'] <- NA
 #' example1[c(5,30,50),'sunspot'] <- c(-50,300,400)
-#' example1 <- example1[-(100:200),]
+#' example1 <- example1[-(70:100),]
 #' bin.period <- 11 # aggregation performed every 11 years (the year is numeric here)
 #' bin.side <- 1989 # to capture the last year, 1988, in a complete bin
 #' bin.FUN <- 'mean'
-#' bin.max.f.NA <- 0.2
-#' ylim <- c(0,Inf)
+#' bin.max.f.NA <- 0.2 # maximum of 20% of missing data per bin
+#' ylim <- c(0,Inf) # negative values are impossible
 #'
 #' list.main <- ctbi(example1,bin.period=bin.period,
 #'                        bin.side=bin.side,bin.FUN=bin.FUN,
@@ -53,6 +53,29 @@ globalVariables(c(":=","x", "y", "index.bin","n.points","n.NA","time.bin","cycle
 #' title(paste0('mean cycle (weak cyclicity: SCI = ',SCI.example1,')'))
 #' # the SCI is much higher on the raw dataset without contamination (SCI = 0.34)
 #' ctbi.plot(list.main,show.n.bin=10)
+#'
+#' # example of beaver data
+#' temp.beaver <- beaver1[,'temp']
+#' t.char <- as.character(beaver1[,'time'])
+#' minutes <- substr(t.char,nchar(t.char)-1,nchar(t.char))
+#' hours <- substr(t.char,nchar(t.char)-3,nchar(t.char)-2)
+#' hours[hours==""] <- '0'
+#' days <- c(rep(12,91),rep(13,23))
+#' time.beaver <- as.POSIXct(paste0('2000-12-',days,' ',hours,':',minutes,':00'),tz='UTC')
+#' example2 <- data.frame(time=time.beaver,temp=temp.beaver)
+#'
+#' bin.period <- '1 hour' # aggregation performed every hour
+#' bin.side <- as.POSIXct('2000-12-12 00:00:00',tz='UTC') # start of a bin
+#' bin.FUN <- 'mean' # aggregation operator
+#' bin.max.f.NA <- 0.2 # maximum of 20% of missing data per bin
+#' ylim <- c(-Inf,Inf)
+#' list.main <- ctbi(example2,bin.period=bin.period,
+#'                  bin.side=bin.side,bin.FUN=bin.FUN,
+#'                  ylim=ylim,bin.max.f.NA=bin.max.f.NA)
+#' data0.example2 <- list.main$data0 # cleaned raw dataset
+#' data1.example2 <- list.main$data1 # aggregated dataset. 1 outlier flagged.
+#' SCI.example2 <- list.main$SCI # this data set shows no seasonality every hour
+#' ctbi.plot(list.main,show.n.bin = 50)
 #' @export
 #' @import data.table
 #' @import stats
@@ -200,7 +223,7 @@ ctbi <- function(data.input,bin.side=NULL,bin.period,bin.center=NULL,bin.FUN = '
   data1[is.na(n.points),n.points := 0]
 
   # calculate the median number of points per bin, bin.size
-  bin.size <- unlist(data1[,n.points],use.names = F)
+  bin.size <- unlist(data1[,n.points],use.names = FALSE)
   bin.size <- bin.size[bin.size!=0]
   if(length(bin.size) <= 4)
   {
@@ -244,10 +267,10 @@ ctbi <- function(data.input,bin.side=NULL,bin.period,bin.center=NULL,bin.FUN = '
   data0[,y := hidd.replace(y,N.min.NA=n.bin.min),by=index.bin]
 
   # step 2 : calculate the long.term trend with the median
-  data0 <- ctbi.long.term(data0,n.bin.min,seq.bin.side,outliers.checked=F)
+  data0 <- ctbi.long.term(data0,n.bin.min,seq.bin.side,outliers.checked=FALSE)
 
   # step 3 : calculate the median cycle
-  list.cycle <- ctbi.cycle(data0,bin.size,outliers.checked=F)
+  list.cycle <- ctbi.cycle(data0,bin.size,outliers.checked=FALSE)
   data0 <- list.cycle$data0.l
   rm(list.cycle)
 
@@ -270,8 +293,8 @@ ctbi <- function(data.input,bin.side=NULL,bin.period,bin.center=NULL,bin.FUN = '
   N.bin.accepted <- length(N.bin.accepted[N.bin.accepted > 0])
   if(N.bin.accepted > 2)
   {
-    SS.tot <- sum((data0[bin.accepted > 0,y]-data0[bin.accepted > 0,long.term])^2,na.rm=T)
-    SS.res <- sum((data0[bin.accepted > 0,y]-data0[bin.accepted > 0,long.term]-data0[bin.accepted > 0,cycle])^2,na.rm=T)
+    SS.tot <- sum((data0[bin.accepted > 0,y]-data0[bin.accepted > 0,long.term])^2,na.rm=TRUE)
+    SS.res <- sum((data0[bin.accepted > 0,y]-data0[bin.accepted > 0,long.term]-data0[bin.accepted > 0,cycle])^2,na.rm=TRUE)
     SCI <- round(1-(SS.res/SS.tot)-(1/N.bin.accepted),digits=3)
 
     # impute data
@@ -299,8 +322,8 @@ ctbi <- function(data.input,bin.side=NULL,bin.period,bin.center=NULL,bin.FUN = '
       }
 
       # recalculate SCI
-      SS.tot <- sum((data0[bin.accepted > 0,y]-data0[bin.accepted > 0,long.term])^2,na.rm=T)
-      SS.res <- sum((data0[bin.accepted > 0,y]-data0[bin.accepted > 0,long.term]-data0[bin.accepted > 0,cycle])^2,na.rm=T)
+      SS.tot <- sum((data0[bin.accepted > 0,y]-data0[bin.accepted > 0,long.term])^2,na.rm=TRUE)
+      SS.res <- sum((data0[bin.accepted > 0,y]-data0[bin.accepted > 0,long.term]-data0[bin.accepted > 0,cycle])^2,na.rm=TRUE)
       SCI <- round(1-(SS.res/SS.tot)-(1/N.bin.accepted),digits=3)
     }
   }else

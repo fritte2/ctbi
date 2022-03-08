@@ -11,7 +11,7 @@ ctbi.cycle(data0, bin.size, outliers.checked)
 
 \item{bin.size}{median number of points within all non-empty bins}
 
-\item{outliers.checked}{boolean to indicate if the median (outliers.checked = F) or the mean (outliers.checked = T) should be used to calculate the stack}
+\item{outliers.checked}{boolean to indicate if the median (outliers.checked = FALSE) or the mean (outliers.checked = TRUE) should be used to calculate the stack}
 }
 \value{
 A list that contains data0 (data0.l) and a data.table that contains the mean (or median) stack of all accepted bins (FUN.cycle.l)

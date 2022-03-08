@@ -4,7 +4,7 @@
 \alias{ctbi.plot}
 \title{ctbi.plot}
 \usage{
-ctbi.plot(list.main, show.outliers = T, show.n.bin = 10)
+ctbi.plot(list.main, show.outliers = TRUE, show.n.bin = 10)
 }
 \arguments{
 \item{list.main}{the list output from the function ctbi.main}
@@ -12,6 +12,9 @@ ctbi.plot(list.main, show.outliers = T, show.n.bin = 10)
 \item{show.outliers}{boolean to show or hide flagged outliers}
 
 \item{show.n.bin}{number of bins shown within one graphic}
+}
+\value{
+No return value
 }
 \description{
 Plot the raw data with the bins, long-term trend and cyclic component shown.

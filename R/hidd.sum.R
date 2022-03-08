@@ -10,7 +10,7 @@ hidd.sum <- function(x,N.min.NA)
 {
   if(sum(!is.na(x)) >= N.min.NA)
   {
-    y <- sum(x,na.rm=T)+sum(is.na(x))*mean(x,na.rm=T)
+    y <- sum(x,na.rm=TRUE)+sum(is.na(x))*mean(x,na.rm=TRUE)
   }else
   {
     y <- NA_real_

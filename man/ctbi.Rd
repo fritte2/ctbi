@@ -54,16 +54,16 @@ n.bin.min, the minimum number of points for a bin to be accepted
 Clean, decompose and aggregate univariate time series following the procedure "Cyclic/trend decomposition using bin interpolation" and the Logbox method for flagging outliers, both detailed in Ritter, F.: Technical note: A procedure to clean, decompose and aggregate time series, Hydrol. Earth Syst. Sci. Discuss. [preprint], <https://doi.org/10.5194/hess-2021-609>, in review, 2021.
 }
 \examples{
-# example of sunspot data
+# example of contaminated sunspot data
 example1 <- data.frame(year = 1700:1988,sunspot = as.numeric(sunspot.year))
 example1[sample(1:289,30),'sunspot'] <- NA
 example1[c(5,30,50),'sunspot'] <- c(-50,300,400)
-example1 <- example1[-(100:200),]
+example1 <- example1[-(70:100),]
 bin.period <- 11 # aggregation performed every 11 years (the year is numeric here)
 bin.side <- 1989 # to capture the last year, 1988, in a complete bin
 bin.FUN <- 'mean'
-bin.max.f.NA <- 0.2
-ylim <- c(0,Inf)
+bin.max.f.NA <- 0.2 # maximum of 20\% of missing data per bin
+ylim <- c(0,Inf) # negative values are impossible
 
 list.main <- ctbi(example1,bin.period=bin.period,
                        bin.side=bin.side,bin.FUN=bin.FUN,
@@ -85,4 +85,27 @@ lines(mean.cycle.example1[,'generic.time.bin1'],
 title(paste0('mean cycle (weak cyclicity: SCI = ',SCI.example1,')'))
 # the SCI is much higher on the raw dataset without contamination (SCI = 0.34)
 ctbi.plot(list.main,show.n.bin=10)
+
+# example of beaver data
+temp.beaver <- beaver1[,'temp']
+t.char <- as.character(beaver1[,'time'])
+minutes <- substr(t.char,nchar(t.char)-1,nchar(t.char))
+hours <- substr(t.char,nchar(t.char)-3,nchar(t.char)-2)
+hours[hours==""] <- '0'
+days <- c(rep(12,91),rep(13,23))
+time.beaver <- as.POSIXct(paste0('2000-12-',days,' ',hours,':',minutes,':00'),tz='UTC')
+example2 <- data.frame(time=time.beaver,temp=temp.beaver)
+
+bin.period <- '1 hour' # aggregation performed every hour
+bin.side <- as.POSIXct('2000-12-12 00:00:00',tz='UTC') # start of a bin
+bin.FUN <- 'mean' # aggregation operator
+bin.max.f.NA <- 0.2 # maximum of 20\% of missing data per bin
+ylim <- c(-Inf,Inf)
+list.main <- ctbi(example2,bin.period=bin.period,
+                 bin.side=bin.side,bin.FUN=bin.FUN,
+                 ylim=ylim,bin.max.f.NA=bin.max.f.NA)
+data0.example2 <- list.main$data0 # cleaned raw dataset
+data1.example2 <- list.main$data1 # aggregated dataset. 1 outlier flagged.
+SCI.example2 <- list.main$SCI # this data set shows no seasonality every hour
+ctbi.plot(list.main,show.n.bin = 50)
 }

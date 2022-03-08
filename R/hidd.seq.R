@@ -5,6 +5,8 @@
 #' @param from,to the starting and (maximal) end values of the sequence. Of length 1 unless just from is supplied as an unnamed argument.
 #' @param by number: increment of the sequence.
 #' @param length.out desired length of the sequence. A non-negative number, which for seq and seq.int will be rounded up if fractional.
+#'
+#' @return a vector of same class than from
 #' @export
 hidd.seq <- function(from = 1, to = 1, by = ((to - from)/(length.out - 1)),length.out = NULL)
 {

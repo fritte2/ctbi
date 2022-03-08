@@ -13,7 +13,7 @@ ctbi.long.term(data0, n.bin.min, seq.bin.side, outliers.checked)
 
 \item{seq.bin.side}{sequence of the sides of the bins}
 
-\item{outliers.checked}{boolean to indicate if the median (outliers.checked = F) or the mean (outliers.checked = T) should be used to calculate the long-term trend}
+\item{outliers.checked}{boolean to indicate if the median (outliers.checked = FALSE) or the mean (outliers.checked = TRUE) should be used to calculate the long-term trend}
 }
 \value{
 data0 with the long-term trend added (column long.term)

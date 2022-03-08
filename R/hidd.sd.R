@@ -10,7 +10,7 @@ hidd.sd <- function(x,N.min.NA)
 {
   if(sum(!is.na(x)) >= N.min.NA)
   {
-    y <- sd(x,na.rm=T)
+    y <- sd(x,na.rm=TRUE)
   }else
   {
     y <- NA_real_

@@ -18,6 +18,9 @@ hidd.seq(
 
 \item{length.out}{desired length of the sequence. A non-negative number, which for seq and seq.int will be rounded up if fractional.}
 }
+\value{
+a vector of same class than from
+}
 \description{
 similar to seq, except that when 'from' starts the 29, 30 or 31 of a month, seq2 adds 5 days to 'from', run seq, and then subtracts 5 days to the output. This is done because the function seq is not consistent when time series start at the end of the months.
 }

@@ -25,7 +25,7 @@ ctbi.outliers <- function(data0,k.outliers)
 
   if(sum(!is.na(data0[,residuals])) != 0)
   {
-    res.non0 <- unlist(data0[,residuals],use.names = F)
+    res.non0 <- unlist(data0[,residuals],use.names = FALSE)
     res.non0 <- res.non0[!is.na(res.non0)]
     res.non0 <- res.non0[res.non0 != 0]
 

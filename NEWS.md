@@ -1,5 +1,13 @@
 # ctbi (development version)
 
+# ctbi 1.0.1 (2022/03/08)
+
+* F or T have been replaced with FALSE or TRUE
+
+* Example 2 has been added to the help of ctbi
+
+* Value has been added to the help of ctbi.plot and hidd.seq
+
 # ctbi 1.0.0 (2022/03/01)
 
 * ORCID of Francois Ritter has been updated.

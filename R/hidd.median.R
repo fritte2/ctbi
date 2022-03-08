@@ -10,7 +10,7 @@ hidd.median <- function(x,N.min.NA)
 {
   if(sum(!is.na(x)) >= N.min.NA)
   {
-    y <- median(x,na.rm=T)
+    y <- median(x,na.rm=TRUE)
   }else
   {
     y <- NA_real_

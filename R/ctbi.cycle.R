@@ -7,7 +7,7 @@ globalVariables(c(":=","detrended"))
 #'
 #' @param data0 data.table with the columns x (time series), y (values), time.bin (position of x between 0 and 1 with respect to the bin boundaries), cycle.index (index between 1 and bin.size attached to time.bin), and long.term (the long-term trend)
 #' @param bin.size median number of points within all non-empty bins
-#' @param outliers.checked boolean to indicate if the median (outliers.checked = F) or the mean (outliers.checked = T) should be used to calculate the stack
+#' @param outliers.checked boolean to indicate if the median (outliers.checked = FALSE) or the mean (outliers.checked = TRUE) should be used to calculate the stack
 #'
 #' @return A list that contains data0 (data0.l) and a data.table that contains the mean (or median) stack of all accepted bins (FUN.cycle.l)
 #' @examples
@@ -31,16 +31,16 @@ ctbi.cycle <- function(data0,bin.size,outliers.checked)
 
   if(sum(!is.na(data0[,detrended])) != 0)
   {
-    if(outliers.checked == F)
+    if(outliers.checked == FALSE)
     {
-      FUN.cycle <- data0[,lapply(.SD,median,na.rm=T),by=cycle.index,.SDcols='detrended']
+      FUN.cycle <- data0[,lapply(.SD,median,na.rm=TRUE),by=cycle.index,.SDcols='detrended']
     }else
     {
-      FUN.cycle <- data0[,lapply(.SD,mean,na.rm=T),by=cycle.index,.SDcols='detrended']
+      FUN.cycle <- data0[,lapply(.SD,mean,na.rm=TRUE),by=cycle.index,.SDcols='detrended']
     }
 
-    FUN.cycle <- merge(FUN.cycle,data0[,lapply(.SD,sd,na.rm=T),by=cycle.index,.SDcols='detrended'],by="cycle.index")
-    if(outliers.checked == F)
+    FUN.cycle <- merge(FUN.cycle,data0[,lapply(.SD,sd,na.rm=TRUE),by=cycle.index,.SDcols='detrended'],by="cycle.index")
+    if(outliers.checked == FALSE)
     {
       setnames(FUN.cycle,c('cycle.index','median','sd'))
     }else
@@ -65,7 +65,7 @@ ctbi.cycle <- function(data0,bin.size,outliers.checked)
   {
     data0[,cycle := NA]
 
-    if(outliers.checked == F)
+    if(outliers.checked == FALSE)
     {
       FUN.cycle <- data.table(cycle.index=1:bin.size,median=rep(NA_real_,bin.size),sd=rep(NA_real_,bin.size))
     }else

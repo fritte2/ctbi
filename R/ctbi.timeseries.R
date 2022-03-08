@@ -53,7 +53,7 @@ if(class.t == 'integer')
   x.t <- as.numeric(x.t)
   class.t <- 'numeric'
 }
-  
+
 if(class.t == 'IDate')
 {
   x.t <- as.Date(x.t)
@@ -377,10 +377,10 @@ if(log.halfmonth)
 
   # Convention (1 month, 15 days)
   bin.side.DD <- as.numeric(substr(as.character(bin.side),9,10))
-  log.shift.forward <- T
+  log.shift.forward <- TRUE
   if(8 <= bin.side.DD & bin.side.DD <= 24) # bin.side is close to 16, month start at seq - 15 days
   {
-    log.shift.forward <- F
+    log.shift.forward <- FALSE
   }
 
   seq.bin.temp <- rep(seq.bin.side[1],2*length(seq.bin.side))
@@ -418,13 +418,13 @@ if(log.halfmonth)
   read.forward <- bin.side.down < seq.bin.side
   read.backward <- seq.bin.side < bin.side.up
 
-  log.forward <- F
+  log.forward <- FALSE
   seq.bin.temp <- seq.bin.side
   if(sum(read.forward)!=0)
   {
     seq.bin.temp <- seq.bin.side[read.forward] # the first element is bin.side
     seq.bin.temp <- seq.bin.temp[seq(from=1,to=length(seq.bin.temp),by=bin.period.number)]
-    log.forward <- T
+    log.forward <- TRUE
   }
   if(sum(read.backward)!=0)
   {

@@ -5,9 +5,11 @@
 #' @param list.main the list output from the function ctbi.main
 #' @param show.n.bin number of bins shown within one graphic
 #' @param show.outliers boolean to show or hide flagged outliers
+#'
+#' @return No return value
 #' @export
 
-ctbi.plot <- function(list.main,show.outliers=T,show.n.bin=10)
+ctbi.plot <- function(list.main,show.outliers=TRUE,show.n.bin=10)
 {
   # Add legend function (From Jan van der Laan, stackoverflow)
   # https://stackoverflow.com/questions/3932038/plot-a-legend-outside-of-the-plotting-area-in-base-graphics/3932558
@@ -75,10 +77,10 @@ ctbi.plot <- function(list.main,show.outliers=T,show.n.bin=10)
     {
       if(show.outliers)
       {
-        y.lim <- c(min(c(data0[,2],data0[,'outliers'],data0[,'long.term']+data0[,'cycle']),na.rm=T),max(c(data0[,2],data0[,'outliers'],data0[,'long.term']+data0[,'cycle']),na.rm=T))
+        y.lim <- c(min(c(data0[,2],data0[,'outliers'],data0[,'long.term']+data0[,'cycle']),na.rm=TRUE),max(c(data0[,2],data0[,'outliers'],data0[,'long.term']+data0[,'cycle']),na.rm=TRUE))
       }else
       {
-        y.lim <- c(min(c(data0[read.good,2],data0[read.good,'long.term']+data0[read.good,'cycle']),na.rm=T),max(c(data0[read.good,2],data0[read.good,'long.term']+data0[read.good,'cycle']),na.rm=T))
+        y.lim <- c(min(c(data0[read.good,2],data0[read.good,'long.term']+data0[read.good,'cycle']),na.rm=TRUE),max(c(data0[read.good,2],data0[read.good,'long.term']+data0[read.good,'cycle']),na.rm=TRUE))
       }
 
       par(mar = c(5, 4, 1.4, 0.6))
@@ -93,10 +95,10 @@ ctbi.plot <- function(list.main,show.outliers=T,show.n.bin=10)
       abline(v=seq.bin.side[beg_ <= seq.bin.side & seq.bin.side <= end_])
 
 
-        if(sum(data0[,'cycle'],na.rm=T)!=0)
+        if(sum(data0[,'cycle'],na.rm=TRUE)!=0)
         {
         lines(data0[,1],data0[,'long.term']+data0[,'cycle'],lwd=2,col='blue')
-          if(sum(data0[,'imputed'],na.rm=T)!=0)
+          if(sum(data0[,'imputed'],na.rm=TRUE)!=0)
           {
             if(show.outliers)
             {
