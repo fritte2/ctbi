@@ -1,5 +1,9 @@
 # ctbi (development version)
 
+# ctbi 2.0.0 (2022/06/10)
+
+* The LogBox method has changed from alpha = 1+klog(n) to alpha = 1.6+klog(n)+19/n
+
 # ctbi 1.0.1 (2022/03/08)
 
 * F or T have been replaced with FALSE or TRUE

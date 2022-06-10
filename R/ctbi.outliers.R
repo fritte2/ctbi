@@ -1,6 +1,6 @@
 #' @title ctbi.outliers
 #'
-#' @description Flag the outliers with the Logbox method, which replaces the original constant 1.5 of the Boxplot rule with k.outliers*log(n)+1, with n being the sample size of the residuals (detrended & deseasonalized).
+#' @description Flag the outliers with the Logbox method, which replaces the original constant 1.5 of the Boxplot rule with k.outliers*log(n)+1.6+19/n, with n being the sample size of the residuals (detrended & deseasonalized).
 #'
 #' @param data0 data.table with the columns x (time series), y (values), long.term (the long-term trend) and cycle (the cyclic component)
 #' @param k.outliers positive numeric that defines the outlier level in the Logbox method used to flag outliers, with k.outliers = 0.16 corresponding to a Gaussian distribution and k.outliers = 0.8 to an Exponential distribution. The default value of k.outliers = 0.6 has been calculated based on a set of distributions with moderate skewness and kurtosis (the Pearson family). k.outliers = Inf means that no outliers are flagged
@@ -22,8 +22,9 @@ ctbi.outliers <- function(data0,k.outliers)
 {
   # residuals
   data0[,residuals := y-long.term-cycle]
+  n.size <- sum(!is.na(data0[,residuals]))
 
-  if(sum(!is.na(data0[,residuals])) != 0)
+  if(n.size != 0)
   {
     res.non0 <- unlist(data0[,residuals],use.names = FALSE)
     res.non0 <- res.non0[!is.na(res.non0)]
@@ -33,7 +34,7 @@ ctbi.outliers <- function(data0,k.outliers)
     {
       q.25 <- quantile(res.non0,0.25)
       q.75 <- quantile(res.non0,0.75)
-      alpha <- k.outliers*log(sum(!is.na(data0[,residuals])))+1
+      alpha <- k.outliers*log(n.size)+1.6+(19/n.size)
       lower.boundary <- q.25 - alpha*(q.75-q.25)
       upper.boundary <- q.75 + alpha*(q.75-q.25)
 
