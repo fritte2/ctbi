@@ -34,8 +34,13 @@
 #' seq.bin.center.numeric <- list.ts$seq.bin.center
 #' @export
 
-ctbi.timeseries <- function(x.t,bin.period,bin.side=NULL,bin.center=NULL)
+ctbi.timeseries <- function(x.t,bin.period,bin.side,bin.center=NULL)
 {
+  if(missing(bin.side))
+  {
+    bin.side <- NULL
+  }
+
 # class of the time series
 class.t <- class(x.t)
 class.t <- class.t[1]

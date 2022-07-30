@@ -7,7 +7,7 @@
 ctbi.plot(list.main, show.outliers = TRUE, show.n.bin = 10)
 }
 \arguments{
-\item{list.main}{the list output from the function ctbi.main}
+\item{list.main}{the list output from the function ctbi}
 
 \item{show.outliers}{boolean to show or hide flagged outliers}
 

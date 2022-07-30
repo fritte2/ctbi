@@ -4,7 +4,7 @@
 \alias{ctbi.timeseries}
 \title{ctbi.timeseries}
 \usage{
-ctbi.timeseries(x.t, bin.period, bin.side = NULL, bin.center = NULL)
+ctbi.timeseries(x.t, bin.period, bin.side, bin.center = NULL)
 }
 \arguments{
 \item{x.t}{original timeseries (date, POSIXct or numeric)}

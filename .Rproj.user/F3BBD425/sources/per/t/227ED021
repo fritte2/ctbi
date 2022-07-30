@@ -1,0 +1,26 @@
+{
+    "id": "227ED021",
+    "path": "~/GitHub/ctbi/R/ctbi.R",
+    "project_path": "R/ctbi.R",
+    "type": "r_source",
+    "hash": "1170853303",
+    "contents": "",
+    "dirty": false,
+    "created": 1659105002411.0,
+    "source_on_save": false,
+    "relative_order": 2,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "84,1",
+        "scrollLine": "58"
+    },
+    "folds": "84|1|472|0|\n87|3|235|2|\n",
+    "lastKnownWriteTime": 1659189749,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1659190306312,
+    "read_only": false,
+    "read_only_alternatives": []
+}

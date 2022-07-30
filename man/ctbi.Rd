@@ -6,22 +6,22 @@
 \usage{
 ctbi(
   data.input,
-  bin.side = NULL,
+  bin.side,
   bin.period,
   bin.center = NULL,
   bin.FUN = "mean",
   bin.max.f.NA = 0.2,
   SCI.min = 0.6,
-  k.outliers = 0.6,
+  coeff.outlier = "auto",
   ylim = c(-Inf, +Inf)
 )
 }
 \arguments{
-\item{data.input}{Two columns data.table (or data.frame) with the first column being the time component (POSIXct, Date or numeric) and the second column the value (numeric)}
+\item{data.input}{Two columns data.frame (or data.table) with the first column being the time component (POSIXct, Date or numeric) and the second column the value (numeric)}
 
-\item{bin.side}{one side of a bin (same class as the time component)}
+\item{bin.side}{one side of any bin (same class as the time component)}
 
-\item{bin.period}{time interval between two sides of a bin. If the time component x.t of data0 is numeric, bin.period is numeric. If x.t is POSIXct or Date, bin.period = 'k units', with k an integer and units = (seconds, minutes, hours, days, weeks, half-months, months, years, decades, centuries, millenaries)}
+\item{bin.period}{time interval between two sides of a bin. If the time component x.t of data.input is numeric, bin.period is numeric. If x.t is POSIXct or Date, bin.period = 'k units', with k an integer and units = (seconds, minutes, hours, days, weeks, half-months, months, years, decades, centuries, millenaries)}
 
 \item{bin.center}{if bin.side is not specified, one center of a bin (same class as the time component)}
 
@@ -29,35 +29,33 @@ ctbi(
 
 \item{bin.max.f.NA}{numeric between 0 and 1 that specifies the maximum fraction of missing values for a bin to be accepted. The minimum number of non-NA points for a bin to be accepted is bin.size*(1-bin.max.f.NA) with bin.size the number of points per bin}
 
-\item{SCI.min}{numeric between 0 and 1 that is compared to the Stacked Cycles Index (SCI). If SCI > SCI.min, missing values are imputed in accepted bins with the sum of the long-term and cyclic components. SCI.min = Inf means that no values are imputed}
+\item{SCI.min}{numeric between 0 and 1 that is compared to the Stacked Cycles Index (SCI). If SCI > SCI.min, missing values are imputed in accepted bins with the sum of the long-term and cyclic components. If SCI.min = NA, no values are imputed}
 
-\item{k.outliers}{positive numeric that defines the outlier level in the Logbox method used to flag outliers, with k.outliers = 0.16 corresponding to a Gaussian distribution and k.outliers = 0.8 to an Exponential distribution. The default value of k.outliers = 0.6 has been calculated based on a set of distributions with moderate skewness and kurtosis (the Pearson family). k.outliers = Inf means that no outliers are flagged}
+\item{coeff.outlier}{One of coeff.outlier = 'auto' (default value), coeff.outlier = 'gaussian', coeff.outlier = c(A,B,C) or coeff.outlier = NA. The original constant 1.5 of the Boxplot rule will be replaced with A*log(n)+B+C/n. If coeff.outlier = 'auto', C = 36 and the coefficients A and B are calculated on m.star, a predictor of the kurtosis excess. If coeff.outlier = 'gaussian', coeff.outlier = c(0.08,2,36), adapted to the Gaussian distribution. If coeff.outlier = NA, no outliers are flagged.}
 
-\item{ylim}{numeric vector of length 2 that defines the range of possible values. Values below ylim[1] or above ylim[2] are set to NA}
+\item{ylim}{numeric vector of length 2 that defines the range of possible values. Values below ylim[1] or above ylim[2] are set to NA. Values equal to ylim[1] or ylim[2] are discarded from the residuals}
 }
 \value{
 A list that contains:
 
-data0, the raw dataset (same class as data.input), with 8 columns: (i) time; (ii) outlier-free and imputed data; (iii) index.bin: index of the bins associated with each data points (the index is negative if the bin is rejected); (iv) long.term: long-term trend; (v) cycle: cyclic component; (vi) outliers: quarantined outliers; (vii) imputed: value of the imputed data points; (viii) time.bin: relative position of the data points in their bins, between 0 and 1
+data0, the raw dataset (same class as data.input), with 9 columns: (i) time; (ii) outlier-free and imputed data; (iii) index.bin: index of the bins associated with each data points (the index is negative if the bin is rejected); (iv) long.term: long-term trend; (v) cycle: cyclic component; (vi) residuals: residuals including the outliers; (vii) outliers: quarantined outliers; (viii) imputed: value of the imputed data points; (ix) time.bin: relative position of the data points in their bins, between 0 and 1
 
 data1, the aggregated dataset (same class as data.input), with 10 columns: (i) aggregated time (center of the bins); (ii) aggregated data; (iii) index.bin: index of the bin (negative value if the bin is rejected); (iv) bin.start: start of the bin; (v) bin.end: end of the bin; (vi) n.points: number of points per bin (including NA values); (vii) n.NA: number of NA values per bin, originally; (viii) n.outliers: number of outliers per bin; (ix) n.imputed: number of imputed points per bin; (x) variability associated with the aggregation (standard deviation for the mean, MAD for the median and nothing for the sum)
 
-SCI (Stacked Cycle Index), a numeric between 0 and 1 related to the strength of the cyclic pattern within each bin. SCI is defined as SCI = 1 - SS.res/SS.tot - 1/N.bin with SS.tot the sum of the squared detrended data, SS.res the sum of the squared detrended & deseasonalized data, and N.bin the number of accepted bins
-
 mean.cycle, a dataset (same class as data.input) with bin.size rows and 4 columns: (i) generic.time.bin1: time of the first bin; (ii) mean: the mean stack of detrended data; (iii) sd: the standard deviation on the mean; (iv) time.bin: relative position of the data points in the bin, between 0 and 1
 
-bin.size, the median number of points in non-empty bins
+summary.bin, a vector that contains bin.size (median number of points in non-empty bins), bin.size.min.accepted (minimum number of points for a bin to be accepted) and SCI (Stacked Cycle Index). SCI is a numeric between 0 and 1 related to the strength of the cyclic pattern within each bin, defined as SCI = 1 - SS.res/SS.tot - 1/N.bin with SS.tot the sum of the squared detrended data, SS.res the sum of the squared detrended & deseasonalized data, and N.bin the number of accepted bins
 
-n.bin.min, the minimum number of points for a bin to be accepted
+summary.outlier, a vector that contains A, B, C (coefficients used to replace 1.5 in the original Boxplot rule with A*log(n)+B+C/n), m.star (predictor of the kurtosis excess), the size of the residuals (n) and the lower and upper outlier threshold
 }
 \description{
 Clean, decompose and aggregate univariate time series following the procedure "Cyclic/trend decomposition using bin interpolation" and the Logbox method for flagging outliers, both detailed in Ritter, F.: Technical note: A procedure to clean, decompose and aggregate time series, Hydrol. Earth Syst. Sci. Discuss. [preprint], <https://doi.org/10.5194/hess-2021-609>, in review, 2021.
 }
 \examples{
-# example of contaminated sunspot data
+# example of the contaminated sunspot data
 example1 <- data.frame(year = 1700:1988,sunspot = as.numeric(sunspot.year))
-example1[sample(1:289,30),'sunspot'] <- NA
-example1[c(5,30,50),'sunspot'] <- c(-50,300,400)
+example1[sample(1:289,30),'sunspot'] <- NA # contaminate data with missing values
+example1[c(5,30,50),'sunspot'] <- c(-50,300,400) # contaminate data with outliers
 example1 <- example1[-(70:100),]
 bin.period <- 11 # aggregation performed every 11 years (the year is numeric here)
 bin.side <- 1989 # to capture the last year, 1988, in a complete bin
@@ -70,9 +68,9 @@ list.main <- ctbi(example1,bin.period=bin.period,
                        ylim=ylim,bin.max.f.NA=bin.max.f.NA)
 data0.example1 <- list.main$data0 # cleaned raw dataset
 data1.example1 <- list.main$data1 # aggregated dataset.
-SCI.example1 <- list.main$SCI # this data set shows a moderate seasonality
 mean.cycle.example1 <- list.main$mean.cycle # this data set shows a moderate seasonality
-bin.size.example1 <- list.main$bin.size # 12 data points per bin on average (12 months per year)
+summary.bin.example1 <- list.main$summary.bin # confirmed with SCI = 0.50
+summary.outlier.example1 <- list.main$summary.outlier
 
 plot(mean.cycle.example1[,'generic.time.bin1'],
      mean.cycle.example1[,'mean'],type='l',ylim=c(-80,80),
@@ -82,11 +80,11 @@ lines(mean.cycle.example1[,'generic.time.bin1'],
       mean.cycle.example1[,'mean']+mean.cycle.example1[,'sd'],type='l',lty=2)
 lines(mean.cycle.example1[,'generic.time.bin1'],
       mean.cycle.example1[,'mean']-mean.cycle.example1[,'sd'],type='l',lty=2)
-title(paste0('mean cycle (weak cyclicity: SCI = ',SCI.example1,')'))
-# the SCI is much higher on the raw dataset without contamination (SCI = 0.34)
+title(paste0('mean cycle (moderate cyclicity: SCI = ',summary.bin.example1['SCI'],')'))
+# plot tool:
 ctbi.plot(list.main,show.n.bin=10)
 
-# example of beaver data
+# example of the beaver data
 temp.beaver <- beaver1[,'temp']
 t.char <- as.character(beaver1[,'time'])
 minutes <- substr(t.char,nchar(t.char)-1,nchar(t.char))
@@ -105,7 +103,7 @@ list.main <- ctbi(example2,bin.period=bin.period,
                  bin.side=bin.side,bin.FUN=bin.FUN,
                  ylim=ylim,bin.max.f.NA=bin.max.f.NA)
 data0.example2 <- list.main$data0 # cleaned raw dataset
-data1.example2 <- list.main$data1 # aggregated dataset. 1 outlier flagged.
-SCI.example2 <- list.main$SCI # this data set shows no seasonality every hour
-ctbi.plot(list.main,show.n.bin = 50)
+data1.example2 <- list.main$data1 # aggregated dataset.
+hist(data0.example2[,'residuals'],xlim=c(-0.5,0.5),30,main='beaver residuals') # show the histogram of the residuals
+abline(v=c(list.main$summary.outlier['lower.outlier.threshold'],list.main$summary.outlier['upper.outlier.threshold']),col='red',lwd=2)
 }

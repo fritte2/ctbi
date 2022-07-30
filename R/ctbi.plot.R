@@ -2,7 +2,7 @@
 #'
 #' @description Plot the raw data with the bins, long-term trend and cyclic component shown.
 #'
-#' @param list.main the list output from the function ctbi.main
+#' @param list.main the list output from the function ctbi
 #' @param show.n.bin number of bins shown within one graphic
 #' @param show.outliers boolean to show or hide flagged outliers
 #'
@@ -23,7 +23,6 @@ ctbi.plot <- function(list.main,show.outliers=TRUE,show.n.bin=10)
 
   data1 <- as.data.frame(list.main$data1)
   data0 <- as.data.frame(list.main$data0)
-  SCI <- list.main$SCI
   rm(list.main)
 
   # add NA values to data0 if entire bins are missing

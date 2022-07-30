@@ -59,6 +59,12 @@ ctbi.cycle <- function(data0,bin.size,outliers.checked)
     y.int <- y.int[(bin.size):(2*bin.size+1)]
     x.int <- c(-1/(2*bin.size),((1:bin.size)/bin.size)-(1/(2*bin.size)),1+1/(2*bin.size))
 
+    # remove the mean value of the mean cycle and add it to the long.term
+    mean.int <- mean(FUN.cycle[[2]],na.rm=T)
+    FUN.cycle[[2]] <- FUN.cycle[[2]]-mean.int
+    y.int <- y.int-mean.int
+    data0[,long.term := long.term+mean.int]
+
     # interpolation across the whole time series
     data0[,cycle := approx(x=x.int,y=y.int,xout=unlist(data0[,time.bin]))$y]
   }else
