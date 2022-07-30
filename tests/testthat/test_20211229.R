@@ -13,14 +13,6 @@ ylim <- c(0,Inf) # a negative number of passengers is impossible
 list.main <- ctbi(example1,bin.period=bin.period,
                        bin.side=bin.side,bin.FUN=bin.FUN,
                        ylim=ylim,bin.max.f.NA=bin.max.f.NA)
-data0.example1 <- list.main$data0 # cleaned raw dataset
-data1.example1 <- list.main$data1 # aggregated dataset.
-SCI.example1 <- list.main$SCI # this data set shows a moderate seasonality
-mean.cycle.example1 <- list.main$mean.cycle # this data set shows a moderate seasonality
-bin.size.example1 <- list.main$bin.size # 12 data points per bin on average (12 months per year)
-plot(example1[,month],example1[,airp]) # contaminated data
-lines(data0.example1[,month],data0.example1[,airp],col='red') # cleaned data
-#ctbi.plot(list.main,show.n.bin=15) # run to see the long.term + cyclic component together
 
 # example 2, sunspot data
 example2 <- data.frame(year = 1700:1988,sunspot = as.numeric(sunspot.year))
@@ -36,24 +28,3 @@ ylim <- c(0,Inf)
 list.main <- ctbi(example2,bin.period=bin.period,
                        bin.side=bin.side,bin.FUN=bin.FUN,
                        ylim=ylim,bin.max.f.NA=bin.max.f.NA)
-data0.example2 <- list.main$data0 # cleaned raw dataset
-data1.example2 <- list.main$data1 # aggregated dataset.
-SCI.example2 <- list.main$SCI # this data set shows a moderate seasonality
-mean.cycle.example2 <- list.main$mean.cycle # this data set shows a moderate seasonality
-bin.size.example2 <- list.main$bin.size # 12 data points per bin on average (12 months per year)
-
-plot(example2[,'year'],example2[,'sunspot']) # contaminated data
-lines(data0.example2[,'year'],
-      data0.example2[,'sunspot'],col='red') # cleaned data
-lines(data1.example2[,'year'],
-      data1.example2[,'sunspot'],col='blue',lwd=2) # aggregated data
-
-plot(mean.cycle.example2[,'generic.time.bin1'],
-     mean.cycle.example2[,'mean'],type='l',ylim=c(-80,80))
-lines(mean.cycle.example2[,'generic.time.bin1'],
-      mean.cycle.example2[,'mean']+mean.cycle.example2[,'sd'],type='l',lty=2)
-lines(mean.cycle.example2[,'generic.time.bin1'],
-      mean.cycle.example2[,'mean']-mean.cycle.example2[,'sd'],type='l',lty=2)
-title(paste0('mean cycle (weak cyclicity: SCI = ',SCI.example2,')'))
-# the SCI is much higher on the raw dataset without contamination (SCI = 0.34)
-# ctbi.plot(list.main,show.n.bin=10)

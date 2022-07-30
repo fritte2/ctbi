@@ -31,7 +31,7 @@ ctbi(
 
 \item{SCI.min}{numeric between 0 and 1 that is compared to the Stacked Cycles Index (SCI). If SCI > SCI.min, missing values are imputed in accepted bins with the sum of the long-term and cyclic components. If SCI.min = NA, no values are imputed}
 
-\item{coeff.outlier}{One of coeff.outlier = 'auto' (default value), coeff.outlier = 'gaussian', coeff.outlier = c(A,B,C) or coeff.outlier = NA. The original constant 1.5 of the Boxplot rule will be replaced with A*log(n)+B+C/n. If coeff.outlier = 'auto', C = 36 and the coefficients A and B are calculated on m.star, a predictor of the kurtosis excess. If coeff.outlier = 'gaussian', coeff.outlier = c(0.08,2,36), adapted to the Gaussian distribution. If coeff.outlier = NA, no outliers are flagged.}
+\item{coeff.outlier}{One of coeff.outlier = 'auto' (default value), coeff.outlier = 'gaussian', coeff.outlier = c(A,B,C) or coeff.outlier = NA. The original constant 1.5 of the Boxplot rule will be replaced with A*log(n)+B+C/n. If coeff.outlier = 'auto', C = 36 and the coefficients A and B are calculated on m.star, a predictor of the kurtosis excess. If coeff.outlier = 'gaussian', coeff.outlier = c(0.08,2,36), adapted to the Gaussian distribution. If coeff.outlier = NA, no outliers are flagged}
 
 \item{ylim}{numeric vector of length 2 that defines the range of possible values. Values below ylim[1] or above ylim[2] are set to NA. Values equal to ylim[1] or ylim[2] are discarded from the residuals}
 }
@@ -104,6 +104,8 @@ list.main <- ctbi(example2,bin.period=bin.period,
                  ylim=ylim,bin.max.f.NA=bin.max.f.NA)
 data0.example2 <- list.main$data0 # cleaned raw dataset
 data1.example2 <- list.main$data1 # aggregated dataset.
-hist(data0.example2[,'residuals'],xlim=c(-0.5,0.5),30,main='beaver residuals') # show the histogram of the residuals
-abline(v=c(list.main$summary.outlier['lower.outlier.threshold'],list.main$summary.outlier['upper.outlier.threshold']),col='red',lwd=2)
+lower.threshold <- list.main$summary.outlier['lower.outlier.threshold']
+upper.threshold <- list.main$summary.outlier['upper.outlier.threshold']
+hist(data0.example2[,'residuals'],xlim=c(-0.5,0.5),30,main='beaver residuals')
+abline(v=c(lower.threshold,upper.threshold),col='red',lwd=2) # show the histogram of the residuals
 }

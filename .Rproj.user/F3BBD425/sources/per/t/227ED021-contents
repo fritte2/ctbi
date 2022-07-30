@@ -73,8 +73,10 @@ globalVariables(c(".",":=","x", "y", "index.bin","n.points","n.NA","time.bin","c
 #'                  ylim=ylim,bin.max.f.NA=bin.max.f.NA)
 #' data0.example2 <- list.main$data0 # cleaned raw dataset
 #' data1.example2 <- list.main$data1 # aggregated dataset.
-#' hist(data0.example2[,'residuals'],xlim=c(-0.5,0.5),30,main='beaver residuals') # show the histogram of the residuals
-#' abline(v=c(list.main$summary.outlier['lower.outlier.threshold'],list.main$summary.outlier['upper.outlier.threshold']),col='red',lwd=2)
+#' lower.threshold <- list.main$summary.outlier['lower.outlier.threshold']
+#' upper.threshold <- list.main$summary.outlier['upper.outlier.threshold']
+#' hist(data0.example2[,'residuals'],xlim=c(-0.5,0.5),30,main='beaver residuals')
+#' abline(v=c(lower.threshold,upper.threshold),col='red',lwd=2) # show the histogram of the residuals
 #' @export
 #' @import data.table
 #' @import stats
