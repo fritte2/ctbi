@@ -7,20 +7,24 @@
 <!-- badges: end -->
 
 The goal of ctbi is to clean, decompose, impute and aggregate univariate
-time series. Ctbi stands for *Cyclic/trend decomposition using bin
-interpolation* : the time series is divided into a sequence of
+time series. Ctbi stands for *Cyclic/Trend decomposition using Bin
+Interpolation* : the time series is divided into a sequence of
 non-overlapping bins. The long-term trend is a linear interpolation of
 the mean values between successive bins and the cyclic component is the
 mean stack of detrended data within all bins. Outliers present in the
 residuals are flagged using an enhanced Boxplot rule called Logbox,
-which replaces the original 1.5 constant with
-![A \\times \\log(n)+B+C/n](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;A%20%5Ctimes%20%5Clog%28n%29%2BB%2BC%2Fn "A \times \log(n)+B+C/n")
-(![n](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;n "n")
-being the sample size, C = 36 and A,B being automatically calculated on
-a predictor of the kurtosis-excess). The strength of the cyclic pattern
-within each bin is quantified by a new metric, the Stacked Cycles Index
-(SCI), with SCI \<= 0 associated with no cyclicity and SCI = 1 a
-perfectly cyclic signal.
+which replaces the original 1.5 constant with $A \times \log(n)+B+C/n$
+($n$ being the sample size, C = 36 and A,B being automatically
+calculated on a predictor of the kurtosis-excess). The strength of the
+cyclic pattern within each bin is quantified by a new metric, the
+Stacked Cycles Index (SCI), with SCI \<= 0 associated with no cyclicity
+and SCI = 1 a perfectly cyclic signal.
+
+The companion paper describing this package is Ritter, F.: Technical
+note: A procedure to clean, decompose and aggregate time series, Hydrol.
+Earth Syst. Sci. Discuss., in review, 2022. Please quote the temporary
+DOI linked to the latest version of the manuscript until the review is
+finished: <https://doi.org/10.31223/X5107C>.
 
 ## Installation
 

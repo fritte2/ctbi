@@ -3,7 +3,7 @@
     "path": "~/GitHub/ctbi/R/ctbi.R",
     "project_path": "R/ctbi.R",
     "type": "r_source",
-    "hash": "216162391",
+    "hash": "0",
     "contents": "",
     "dirty": false,
     "created": 1659105002411.0,
@@ -12,8 +12,8 @@
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "30,40",
-        "scrollLine": "11"
+        "cursorPosition": "5,216",
+        "scrollLine": "0"
     },
     "folds": "",
     "lastKnownWriteTime": 1668763598,
