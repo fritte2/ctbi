@@ -9,7 +9,7 @@
 # ctbi 2.0.3 (2022/07/27)
 
 * summary.bin has been added to the output of ctbi, and it condenses the information about the size of a bin (bin.size), the minimum number of points for a bin to be accepted (bin.size.min.accepted) and the Stacked Cycle Index (SCI)
-* the mean of mean cycle has been substracted and added to the long.term
+* the mean of mean cycle has been subtracted and added to the long.term
 * examples have been updated
 
 # ctbi 2.0.2 (2022/07/25)

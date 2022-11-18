@@ -7,7 +7,7 @@
 ctbi.timeseries(x.t, bin.period, bin.side, bin.center = NULL)
 }
 \arguments{
-\item{x.t}{original timeseries (date, POSIXct or numeric)}
+\item{x.t}{original time series (date, POSIXct or numeric)}
 
 \item{bin.period}{time interval between two sides of a bin. If x.t is numeric, bin.period is numeric. If x.t is POSIXct or Date, bin.period = 'k units', with k an integer and units = (seconds, minutes, hours, days, weeks, half-months, months, years, decades, centuries, millenaries)}
 
