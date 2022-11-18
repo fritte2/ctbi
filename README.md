@@ -14,11 +14,11 @@ the mean values between successive bins and the cyclic component is the
 mean stack of detrended data within all bins. Outliers present in the
 residuals are flagged using an enhanced Boxplot rule called Logbox,
 which replaces the original 1.5 constant with $A \times \log(n)+B+C/n$
-($n$ being the sample size, C = 36 and A,B being automatically
-calculated on a predictor of the kurtosis-excess). The strength of the
-cyclic pattern within each bin is quantified by a new metric, the
-Stacked Cycles Index (SCI), with SCI \<= 0 associated with no cyclicity
-and SCI = 1 a perfectly cyclic signal.
+(n being the sample size, C = 36 and A,B being automatically calculated
+on a predictor of the kurtosis-excess). The strength of the cyclic
+pattern within each bin is quantified by a new metric, the Stacked
+Cycles Index (SCI), with SCI \<= 0 associated with no cyclicity and SCI
+= 1 a perfectly cyclic signal.
 
 The companion paper describing this package is Ritter, F.: Technical
 note: A procedure to clean, decompose and aggregate time series, Hydrol.
