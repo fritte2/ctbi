@@ -17,7 +17,7 @@ ctbi(
 )
 }
 \arguments{
-\item{data.input}{Two columns data.frame (or data.table) with the first column being the time component (POSIXct, Date or numeric) and the second column the value (numeric)}
+\item{data.input}{two columns data.frame (or data.table) with the first column being the time component (POSIXct, Date or numeric) and the second column the value (numeric)}
 
 \item{bin.side}{one side of any bin (same class as the time component)}
 
@@ -31,9 +31,9 @@ ctbi(
 
 \item{SCI.min}{numeric between 0 and 1 that is compared to the Stacked Cycles Index (SCI). If SCI > SCI.min, missing values are imputed in accepted bins with the sum of the long-term and cyclic components. If SCI.min = NA, no values are imputed}
 
-\item{coeff.outlier}{One of coeff.outlier = 'auto' (default value), coeff.outlier = 'gaussian', coeff.outlier = c(A,B,C) or coeff.outlier = NA. The original constant 1.5 of the Boxplot rule will be replaced with A*log(n)+B+C/n. If coeff.outlier = 'auto', C = 36 and the coefficients A and B are calculated on m.star, a predictor of the kurtosis excess. If coeff.outlier = 'gaussian', coeff.outlier = c(0.08,2,36), adapted to the Gaussian distribution. If coeff.outlier = NA, no outliers are flagged}
+\item{coeff.outlier}{one of coeff.outlier = 'auto' (default value), coeff.outlier = 'gaussian', coeff.outlier = c(A,B,C) or coeff.outlier = NA. The original constant 1.5 of the Boxplot rule will be replaced with A*log(n)+B+C/n. If coeff.outlier = 'auto', C = 36 and the coefficients A and B are calculated on m.star, a predictor of the kurtosis excess. If coeff.outlier = 'gaussian', coeff.outlier = c(0.08,2,36), adapted to the Gaussian distribution. If coeff.outlier = NA, no outliers are flagged}
 
-\item{ylim}{numeric vector of length 2 that defines the range of possible values. Values below ylim[1] or above ylim[2] are set to NA. Values equal to ylim[1] or ylim[2] are discarded from the residuals}
+\item{ylim}{numeric vector of length 2 that defines the range of possible values. Values strictly below ylim[1] or strictly above ylim[2] are set to NA. Values equal to ylim[1] or ylim[2] are discarded from the residuals}
 }
 \value{
 A list that contains:
@@ -49,16 +49,18 @@ summary.bin, a vector that contains bin.size (median number of points in non-emp
 summary.outlier, a vector that contains A, B, C (coefficients used to replace 1.5 in the original Boxplot rule with A*log(n)+B+C/n), m.star (predictor of the kurtosis excess), the size of the residuals (n) and the lower and upper outlier threshold
 }
 \description{
-Clean, decompose and aggregate univariate time series following the procedure "Cyclic/trend decomposition using bin interpolation" and the Logbox method for flagging outliers, both detailed in Ritter, F.: Technical note: A procedure to clean, decompose and aggregate time series, Hydrol. Earth Syst. Sci. Discuss. [preprint], <https://doi.org/10.5194/hess-2021-609>, in review, 2021.
+Clean, decompose and aggregate univariate time series following the procedure "Cyclic/Trend decomposition using Bin Interpolation" (CTBI) and the Logbox method for flagging outliers, both detailed in Ritter, F.: Technical note: A procedure to clean, decompose and aggregate time series, Hydrol. Earth Syst. Sci. Discuss., in review, 2022. Temporary DOI linked to the latest version of the manuscript until the review is finished: <https://doi.org/10.31223/X5107C>.
+
+Important functions of the package: ctbi, ctbi.outliers (flag outliers in univariate datasets with the Logbox method) and ctbi.plot (plot the time series).
 }
 \examples{
 # example of the contaminated sunspot data
 example1 <- data.frame(year = 1700:1988,sunspot = as.numeric(sunspot.year))
 example1[sample(1:289,30),'sunspot'] <- NA # contaminate data with missing values
 example1[c(5,30,50),'sunspot'] <- c(-50,300,400) # contaminate data with outliers
-example1 <- example1[-(70:100),]
+example1 <- example1[-(70:100),] # create gap in the data
 bin.period <- 11 # aggregation performed every 11 years (the year is numeric here)
-bin.side <- 1989 # to capture the last year, 1988, in a complete bin
+bin.side <- 1989 # give one side of a bin
 bin.FUN <- 'mean'
 bin.max.f.NA <- 0.2 # maximum of 20\% of missing data per bin
 ylim <- c(0,Inf) # negative values are impossible
@@ -95,7 +97,7 @@ time.beaver <- as.POSIXct(paste0('2000-12-',days,' ',hours,':',minutes,':00'),tz
 example2 <- data.frame(time=time.beaver,temp=temp.beaver)
 
 bin.period <- '1 hour' # aggregation performed every hour
-bin.side <- as.POSIXct('2000-12-12 00:00:00',tz='UTC') # start of a bin
+bin.side <- as.POSIXct('2000-12-12 00:00:00',tz='UTC') # give one side of a bin
 bin.FUN <- 'mean' # aggregation operator
 bin.max.f.NA <- 0.2 # maximum of 20\% of missing data per bin
 ylim <- c(-Inf,Inf)

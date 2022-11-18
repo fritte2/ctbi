@@ -19,7 +19,7 @@ xy, a two columns data frame that contains the clean data (first column) and the
 summary.outlier = c(A,B,C,m.star,n,lower.outlier.threshold,upper.outlier.threshold)
 }
 \description{
-Flag outliers in univariate datasets with the Logbox method, which replaces the original constant 1.5 of the Boxplot rule with Alog(n)+B+C/n, with n being the sample size (n > 8). For 2 < n < 9, the lower/upper outlier threshold are defined as median(y) +/- 12.5MAD with MAD the median absolute deviation. Details are given in PAPER.
+Flag outliers in univariate datasets with the Logbox method, which replaces the original constant 1.5 of the Boxplot rule with Alog(n)+B+C/n, with n being the sample size (n > 8). For 2 < n < 9, the lower/upper outlier threshold are defined as median(y) +/- 12.5MAD with MAD the median absolute deviation. Details are given in Ritter, F.: Technical note: A procedure to clean, decompose and aggregate time series, Hydrol. Earth Syst. Sci. Discuss., in review, 2022. Temporary DOI linked to the latest version of the manuscript until the review is finished: <https://doi.org/10.31223/X5107C>.
 }
 \examples{
 x <- runif(30)

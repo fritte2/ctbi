@@ -3,7 +3,7 @@
     "path": "~/GitHub/ctbi/R/ctbi.R",
     "project_path": "R/ctbi.R",
     "type": "r_source",
-    "hash": "3375859379",
+    "hash": "216162391",
     "contents": "",
     "dirty": false,
     "created": 1659105002411.0,
@@ -12,15 +12,15 @@
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "77,81",
-        "scrollLine": "0"
+        "cursorPosition": "30,40",
+        "scrollLine": "11"
     },
-    "folds": "86|1|474|0|\n89|3|237|2|\n",
-    "lastKnownWriteTime": 1659190835,
+    "folds": "",
+    "lastKnownWriteTime": 1668763598,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1659190835346,
+    "last_content_update": 1668763598580,
     "read_only": false,
     "read_only_alternatives": []
 }

@@ -1,0 +1,16 @@
+citHeader("To cite ctbi in publications use:")
+
+citEntry(
+  entry    = "Article",
+  title    = "Technical note: A procedure to clean, decompose and aggregate time series, in review",
+  author   = "Francois Ritter",
+  journal  = "Hydrology and Earth System Sciences Discussions",
+  year     = "2021",
+  volume   = "2021",
+  number   = "1",
+  pages    = "1--21",
+  url      = "https://eartharxiv.org/repository/view/4714/",
+  textVersion = paste(
+
+  )
+)

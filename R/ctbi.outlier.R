@@ -1,6 +1,6 @@
 #' @title ctbi.outlier
 #'
-#' @description Flag outliers in univariate datasets with the Logbox method, which replaces the original constant 1.5 of the Boxplot rule with Alog(n)+B+C/n, with n being the sample size (n > 8). For 2 < n < 9, the lower/upper outlier threshold are defined as median(y) +/- 12.5MAD with MAD the median absolute deviation. Details are given in PAPER.
+#' @description Flag outliers in univariate datasets with the Logbox method, which replaces the original constant 1.5 of the Boxplot rule with Alog(n)+B+C/n, with n being the sample size (n > 8). For 2 < n < 9, the lower/upper outlier threshold are defined as median(y) +/- 12.5MAD with MAD the median absolute deviation. Details are given in Ritter, F.: Technical note: A procedure to clean, decompose and aggregate time series, Hydrol. Earth Syst. Sci. Discuss., in review, 2022. Temporary DOI linked to the latest version of the manuscript until the review is finished: <https://doi.org/10.31223/X5107C>.
 #'
 #' @param y univariate data (numeric vector)
 #' @param coeff.outlier One of coeff.outlier = 'auto' (default value), coeff.outlier = 'gaussian', coeff.outlier = c(A,B,C) or coeff.outlier = NA. If coeff.outlier = 'auto', C = 36 and the coefficients A and B are calculated on m.star, a predictor of the kurtosis excess. If coeff.outlier = 'gaussian', coeff.outlier = c(0.08,2,36), adapted to the Gaussian distribution. If coeff.outlier = NA, no outliers are flagged.

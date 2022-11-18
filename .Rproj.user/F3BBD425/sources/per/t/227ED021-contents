@@ -3,17 +3,18 @@ globalVariables(c(".",":=","x", "y", "index.bin","n.points","n.NA","time.bin","c
 
 #' @title ctbi
 #'
-#' @description Clean, decompose and aggregate univariate time series following the procedure "Cyclic/trend decomposition using bin interpolation" and the Logbox method for flagging outliers, both detailed in Ritter, F.: Technical note: A procedure to clean, decompose and aggregate time series, Hydrol. Earth Syst. Sci. Discuss. [preprint], <https://doi.org/10.5194/hess-2021-609>, in review, 2021.
+#' @description Clean, decompose and aggregate univariate time series following the procedure "Cyclic/Trend decomposition using Bin Interpolation" (CTBI) and the Logbox method for flagging outliers, both detailed in Ritter, F.: Technical note: A procedure to clean, decompose and aggregate time series, Hydrol. Earth Syst. Sci. Discuss., in review, 2022. Temporary DOI linked to the latest version of the manuscript until the review is finished: <https://doi.org/10.31223/X5107C>.
 #'
-#' @param data.input Two columns data.frame (or data.table) with the first column being the time component (POSIXct, Date or numeric) and the second column the value (numeric)
+#' Important functions of the package: ctbi, ctbi.outliers (flag outliers in univariate datasets with the Logbox method) and ctbi.plot (plot the time series).
+#' @param data.input two columns data.frame (or data.table) with the first column being the time component (POSIXct, Date or numeric) and the second column the value (numeric)
 #' @param bin.side one side of any bin (same class as the time component)
 #' @param bin.center if bin.side is not specified, one center of a bin (same class as the time component)
 #' @param bin.period time interval between two sides of a bin. If the time component x.t of data.input is numeric, bin.period is numeric. If x.t is POSIXct or Date, bin.period = 'k units', with k an integer and units = (seconds, minutes, hours, days, weeks, half-months, months, years, decades, centuries, millenaries)
 #' @param bin.FUN character ('mean', 'median' or 'sum') that defines the aggregating operator
 #' @param bin.max.f.NA numeric between 0 and 1 that specifies the maximum fraction of missing values for a bin to be accepted. The minimum number of non-NA points for a bin to be accepted is bin.size*(1-bin.max.f.NA) with bin.size the number of points per bin
 #' @param SCI.min numeric between 0 and 1 that is compared to the Stacked Cycles Index (SCI). If SCI > SCI.min, missing values are imputed in accepted bins with the sum of the long-term and cyclic components. If SCI.min = NA, no values are imputed
-#' @param coeff.outlier One of coeff.outlier = 'auto' (default value), coeff.outlier = 'gaussian', coeff.outlier = c(A,B,C) or coeff.outlier = NA. The original constant 1.5 of the Boxplot rule will be replaced with A*log(n)+B+C/n. If coeff.outlier = 'auto', C = 36 and the coefficients A and B are calculated on m.star, a predictor of the kurtosis excess. If coeff.outlier = 'gaussian', coeff.outlier = c(0.08,2,36), adapted to the Gaussian distribution. If coeff.outlier = NA, no outliers are flagged
-#' @param ylim numeric vector of length 2 that defines the range of possible values. Values below ylim[1] or above ylim[2] are set to NA. Values equal to ylim[1] or ylim[2] are discarded from the residuals
+#' @param coeff.outlier one of coeff.outlier = 'auto' (default value), coeff.outlier = 'gaussian', coeff.outlier = c(A,B,C) or coeff.outlier = NA. The original constant 1.5 of the Boxplot rule will be replaced with A*log(n)+B+C/n. If coeff.outlier = 'auto', C = 36 and the coefficients A and B are calculated on m.star, a predictor of the kurtosis excess. If coeff.outlier = 'gaussian', coeff.outlier = c(0.08,2,36), adapted to the Gaussian distribution. If coeff.outlier = NA, no outliers are flagged
+#' @param ylim numeric vector of length 2 that defines the range of possible values. Values strictly below ylim[1] or strictly above ylim[2] are set to NA. Values equal to ylim[1] or ylim[2] are discarded from the residuals
 #' @return A list that contains:
 #' @return data0, the raw dataset (same class as data.input), with 9 columns: (i) time; (ii) outlier-free and imputed data; (iii) index.bin: index of the bins associated with each data points (the index is negative if the bin is rejected); (iv) long.term: long-term trend; (v) cycle: cyclic component; (vi) residuals: residuals including the outliers; (vii) outliers: quarantined outliers; (viii) imputed: value of the imputed data points; (ix) time.bin: relative position of the data points in their bins, between 0 and 1
 #' @return data1, the aggregated dataset (same class as data.input), with 10 columns: (i) aggregated time (center of the bins); (ii) aggregated data; (iii) index.bin: index of the bin (negative value if the bin is rejected); (iv) bin.start: start of the bin; (v) bin.end: end of the bin; (vi) n.points: number of points per bin (including NA values); (vii) n.NA: number of NA values per bin, originally; (viii) n.outliers: number of outliers per bin; (ix) n.imputed: number of imputed points per bin; (x) variability associated with the aggregation (standard deviation for the mean, MAD for the median and nothing for the sum)
@@ -25,9 +26,9 @@ globalVariables(c(".",":=","x", "y", "index.bin","n.points","n.NA","time.bin","c
 #' example1 <- data.frame(year = 1700:1988,sunspot = as.numeric(sunspot.year))
 #' example1[sample(1:289,30),'sunspot'] <- NA # contaminate data with missing values
 #' example1[c(5,30,50),'sunspot'] <- c(-50,300,400) # contaminate data with outliers
-#' example1 <- example1[-(70:100),]
+#' example1 <- example1[-(70:100),] # create gap in the data
 #' bin.period <- 11 # aggregation performed every 11 years (the year is numeric here)
-#' bin.side <- 1989 # to capture the last year, 1988, in a complete bin
+#' bin.side <- 1989 # give one side of a bin
 #' bin.FUN <- 'mean'
 #' bin.max.f.NA <- 0.2 # maximum of 20% of missing data per bin
 #' ylim <- c(0,Inf) # negative values are impossible
@@ -64,7 +65,7 @@ globalVariables(c(".",":=","x", "y", "index.bin","n.points","n.NA","time.bin","c
 #' example2 <- data.frame(time=time.beaver,temp=temp.beaver)
 #'
 #' bin.period <- '1 hour' # aggregation performed every hour
-#' bin.side <- as.POSIXct('2000-12-12 00:00:00',tz='UTC') # start of a bin
+#' bin.side <- as.POSIXct('2000-12-12 00:00:00',tz='UTC') # give one side of a bin
 #' bin.FUN <- 'mean' # aggregation operator
 #' bin.max.f.NA <- 0.2 # maximum of 20% of missing data per bin
 #' ylim <- c(-Inf,Inf)
@@ -121,13 +122,13 @@ ctbi <- function(data.input,bin.side,bin.period,bin.center=NULL,bin.FUN = 'mean'
 
     if(missing(bin.side) & is.null(bin.center))
     {
-      char.bin.side <- 'bin.side (or bin.center) is a mandatory input. It has the same class as the time component and designates one side of any bin.'
+      char.bin.side <- 'bin.side (or bin.center) is a mandatory input. It has the same class as the time component and corresponds to one side of any bin.'
       stop(char.bin.side)
     }
 
     if(missing(bin.period))
     {
-      char.bin.period <- 'bin.period is a mandatory input. bin.period is the time interval between two sides of a bin. If the time component x.t of data.input is numeric, bin.period is numeric. If x.t is POSIXct or Date, bin.period = \'k units\', with k an integer and units = (seconds, minutes, hours, days, weeks, half-months, months, years, decades, centuries, millenaries)'
+      char.bin.period <- 'bin.period is a mandatory input. It is the time interval between two sides of a bin. If the time component x.t of data.input is numeric, bin.period is numeric. If x.t is POSIXct or Date, bin.period = \'k units\', with k a numeric and units = (seconds, minutes, hours, days, weeks, half-months, months, years, decades, centuries, millenaries)'
       stop(char.bin.period)
     }
 
@@ -158,7 +159,7 @@ ctbi <- function(data.input,bin.side,bin.period,bin.center=NULL,bin.FUN = 'mean'
     }
 
     # bin.FUN
-    char.bin.FUN <- 'bin.FUN must be the character \'mean\',\'median\' or \'sum\' to perform the temporal aggregation.'
+    char.bin.FUN <- 'bin.FUN is one of \'mean\',\'median\' or \'sum\' to perform the temporal aggregation.'
     if(length(bin.FUN)==1)
     {
       if(!is.character(bin.FUN))
@@ -321,7 +322,7 @@ ctbi <- function(data.input,bin.side,bin.period,bin.center=NULL,bin.FUN = 'mean'
 
   # step 4 : calculate the outliers
   data0[,residuals := y-long.term-cycle] # residuals
-  data0[y == ylim[1] | y == ylim[2],residuals := NA_real_] # residuals that exactly fall on ylim are discarded
+  data0[residuals == ylim[1] | residuals == ylim[2],residuals := NA_real_] # residuals that exactly fall on ylim are discarded
   list.out <- ctbi.outlier(as.numeric(data0[,residuals]),coeff.outlier)
   data0[,residuals := list.out$xy[,'outliers']]
   data0[!is.na(residuals),outliers := y]
@@ -357,8 +358,8 @@ ctbi <- function(data.input,bin.side,bin.period,bin.center=NULL,bin.FUN = 'mean'
       {
         data0[bin.accepted > 0 & is.na(y),imputed := long.term+cycle]
         # some imputed values might be impossible
-        data0[imputed < ylim[1],imputed := ylim[1]]
-        data0[imputed > ylim[2],imputed := ylim[2]]
+        data0[imputed <= ylim[1],imputed := ylim[1]]
+        data0[imputed >= ylim[2],imputed := ylim[2]]
         data0[!is.na(imputed),y := imputed]
 
         for(i in 1:2) # repeat twice
@@ -371,8 +372,8 @@ ctbi <- function(data.input,bin.side,bin.period,bin.center=NULL,bin.FUN = 'mean'
           rm(list.cycle)
           data0[!is.na(imputed),imputed := long.term+cycle]
           # some imputed values might be impossible
-          data0[imputed < ylim[1],imputed := ylim[1]]
-          data0[imputed > ylim[2],imputed := ylim[2]]
+          data0[imputed <= ylim[1],imputed := ylim[1]]
+          data0[imputed >= ylim[2],imputed := ylim[2]]
           data0[!is.na(imputed),y := imputed]
         }
 
