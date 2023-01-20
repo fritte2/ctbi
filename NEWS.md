@@ -1,5 +1,11 @@
 # ctbi (development version)
 
+# ctbi 2.0.5 (2023/01/20)
+
+* documentation updated
+* the case of 3 < n < 8 has been removed from ctbi.outlier
+* The companion paper has been published with final DOI and added to ctbi
+
 # ctbi 2.0.4 (2022/11/18)
 
 * Fixed a minor mistake concerning the way residuals are handled for limited range of possible values (ex. [0,+Inf[ instead of ]-Inf,+Inf[)

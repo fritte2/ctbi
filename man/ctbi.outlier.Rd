@@ -9,17 +9,41 @@ ctbi.outlier(y, coeff.outlier = "auto")
 \arguments{
 \item{y}{univariate data (numeric vector)}
 
-\item{coeff.outlier}{One of coeff.outlier = 'auto' (default value), coeff.outlier = 'gaussian', coeff.outlier = c(A,B,C) or coeff.outlier = NA. If coeff.outlier = 'auto', C = 36 and the coefficients A and B are calculated on m.star, a predictor of the kurtosis excess. If coeff.outlier = 'gaussian', coeff.outlier = c(0.08,2,36), adapted to the Gaussian distribution. If coeff.outlier = NA, no outliers are flagged.}
+\item{coeff.outlier}{one of \code{coeff.outlier} = 'auto' (default value), \code{coeff.outlier} = 'gaussian', \code{coeff.outlier} = c(A,B,C) or \code{coeff.outlier} = \code{NA}. If \code{coeff.outlier} = 'auto', C = 36 and the coefficients A and B are calculated on \eqn{m_{*}}. If \code{coeff.outlier} = 'gaussian', \code{coeff.outlier} = c(0.08,2,36), adapted to the Gaussian distribution. If \code{coeff.outlier} = \code{NA}, no outliers are flagged}
 }
 \value{
 A list that contains:
 
-xy, a two columns data frame that contains the clean data (first column) and the outliers (second column).
+\bold{xy}, a two columns data frame that contains the clean data (first column) and the outliers (second column)
 
-summary.outlier = c(A,B,C,m.star,n,lower.outlier.threshold,upper.outlier.threshold)
+\bold{summary.outlier}, a vector that contains A, B, C, \eqn{m_{*}}, the size of the residuals (n), and the lower and upper outlier threshold
 }
 \description{
-Flag outliers in univariate datasets with the Logbox method, which replaces the original constant 1.5 of the Boxplot rule with Alog(n)+B+C/n, with n being the sample size (n > 8). For 2 < n < 9, the lower/upper outlier threshold are defined as median(y) +/- 12.5MAD with MAD the median absolute deviation. Details are given in Ritter, F.: Technical note: A procedure to clean, decompose and aggregate time series, Hydrol. Earth Syst. Sci. Discuss., in review, 2022. Temporary DOI linked to the latest version of the manuscript until the review is finished: <https://doi.org/10.31223/X5107C>.
+\bold{Please cite} the following companion paper if you're using the \code{ctbi} package: Ritter, F.: Technical note: A procedure to clean, decompose, and aggregate time series, Hydrol. Earth Syst. Sci., 27, 349–361, https://doi.org/10.5194/hess-27-349-2023, 2023.
+
+Outliers in an univariate dataset \code{y} are flagged using an enhanced box plot rule (called \bold{Logbox}, input: \code{coeff.outlier}) that is adapted to non-Gaussian data and keeps the type I error at \eqn{\frac{0.1}{\sqrt{n}}} \% (percentage of erroneously flagged outliers).
+
+The box plot rule flags data points as outliers if they are below \eqn{L} or above \eqn{U} using the sample quantile \eqn{q}:
+
+\eqn{L = q(0.25)-\alpha \times (q(0.75)- q(0.25))}
+
+\eqn{U = q(0.75)+\alpha \times (q(0.75)- q(0.25))}
+
+\bold{Logbox} replaces the original \eqn{\alpha = 1.5} constant of the box plot rule with \eqn{\alpha = A \times \log(n)+B+\frac{C}{n}}. The variable \eqn{n \geq 9} is the sample size, \eqn{C = 36} corrects biases emerging in small samples, and \eqn{A} and \eqn{B} are automatically calculated on a predictor of the maximum tail weight defined as \eqn{m_{*} = \max(m_{-},m_{+})-0.6165}.
+
+The two functions (\eqn{m_{-}},\eqn{m_{+}}) are defined as:
+
+\eqn{m_{-} = \frac{q(0.875)- q(0.625)}{q(0.75)- q(0.25)}}
+
+\eqn{m_{+} = \frac{q(0.375)- q(0.125)}{q(0.75)- q(0.25)}}
+
+And finally, \eqn{A = f_{A}(}\eqn{m_{*}}\eqn{)} and \eqn{B = f_{B}(}\eqn{m_{*}}\eqn{)} with \eqn{m_{*}} restricted to [0,2]. The functions \eqn{(f_{A},f_{B})} are defined as:
+
+\eqn{f_{A}(x) = 0.2294\exp(2.9416x-0.0512x^{2}-0.0684x^{3})}
+
+\eqn{f_{B}(x) = 1.0585+15.6960x-17.3618x^{2}+28.3511x^{3}-11.4726x^{4}}
+
+Both functions have been calibrated on the Generalized Extreme Value and Pearson families.
 }
 \examples{
 x <- runif(30)
